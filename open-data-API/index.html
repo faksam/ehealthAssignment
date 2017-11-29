@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <!-- Plotly.js -->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+  <!-- Angularjs -->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+</head>
+<body>
+  <div class="container"  ng-app="myApp" ng-controller="dataCtrl">
+  <div>
+    <h2>Students Trained through ONC Workforce Programs</h2>
+    <p>
+      The Office of the National Coordinator for Health Information Technology (ONC) created the Community College Consortia to Educate Health IT Professionals in Health Care Program and University-based Training Program to increase the workforce of skilled health IT specialists that can help transition health care providers to electronic health records (EHRs). The Community College Consortia Program includes 82 member community colleges representing all 50 states, and the University-based Training Program includes 9 member universities in 9 states. The member community colleges and universities received funding to rapidly create health IT academic programs, or expand existing health IT training programs that can be completed in six months or less. This data provides the number of students trained through both programs, segmented by rural and urban areas for each U.S. state. The data is through September, 2013: the duration of the program. This data is an artifact of ONC's performance measurement for the Recovery and HITECH Acts
+    </p>
+  </div>
+  <br /><br />
+  <h4>Bar Chart Showing Students At Different Regions</h4>
+  <div id="myDiv"><!-- Plotly chart will be drawn inside this DIV --></div>
+
+  <div>
+    <h4>Data Source: </h4>
+    <p>
+      ONC Community College Consortia Program and University-based Training Program data
+    </p>
+      <h4>Data Range: </h4>
+      <p>
+          September, 2013
+      </p>
+        <h4>Last Updated: </h4>
+        <p>
+          06/01/2014
+        </p>
+  </div>
+</div>
+
+
+    <script>
+    var x = [];
+    var y = [];
+    var data = [];
+    var app = angular.module('myApp', []);
+    app.controller('dataCtrl', function($scope, $http) {
+      $http.get("https://dashboard.healthit.gov/api/open-api.php?source=workforce-programs-trained.csv").then(function (response) {
+          $scope.myData = response.data;
+          $scope.content = response.data;
+          $scope.statuscode = response.status;
+          $scope.statustext = response.statusText;
+
+          $scope.content.forEach(
+              (item) => {
+                // do something
+                x.push(item.region);
+                y.push(item.students_trained);
+              }
+            );
+          data = [{"x": x,"y": y,"type": "bar"}];
+
+            Plotly.newPlot('myDiv', data);
+      });
+    });
+    </script>
+</div>
+<!--Import jQuery before materialize.js-->
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="js/materialize.min.js"></script>
+</body>
+</html>
