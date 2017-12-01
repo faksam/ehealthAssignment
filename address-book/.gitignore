@@ -1,3 +1,7 @@
+
+todo-app/todo-app/.vs/
+address-book/.vs/
+
 logs/*
 !.gitkeep
 node_modules/
@@ -6,3 +10,4 @@ country-list-bundle.js
 tmp
 .DS_Store
 .idea
+
